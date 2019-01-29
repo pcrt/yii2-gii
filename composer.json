@@ -1,9 +1,10 @@
 {
-	"name": "pcrt/pcrt-theme",
+	"name": "pcrt/yii2-gii",
 	"type": "library",
-	"description": "Yii2-theme alternative with custom gii generator",
+	"description": "Alternative Gii generator for Yii2 framework",
 	"keywords": ["yii2", "theme", "helper", "assets", "gii"],
-	"license": "MIT",
+	"license": "BSD-3-Clause",
+	"version": "0.9.0",
 	"authors": [
 		{
 			"name": "Marco Petrini",
@@ -13,8 +14,8 @@
 	],
 	"minimum-stability": "stable",
 	"support": {
-		"source": "https://github.com/pcrt/yii2-theme",
-		"issues": "https://github.com/pcrt/yii2-theme/issues"
+		"source": "https://github.com/pcrt/yii2-gii",
+		"issues": "https://github.com/pcrt/yii2-gii/issues"
 	},
 	"autoload": {
 		"psr-4": {
