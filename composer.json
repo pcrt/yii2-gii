@@ -1,0 +1,24 @@
+{
+	"name": "pcrt/pcrt-theme",
+	"type": "library",
+	"description": "Yii2-theme alternative with custom gii generator",
+	"keywords": ["yii2", "theme", "helper", "assets", "gii"],
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Marco Petrini",
+			"email": "info@protocollicreativi.it",
+			"homepage": "http://www.protocollicreativi.it"
+		}
+	],
+	"minimum-stability": "stable",
+	"support": {
+		"source": "https://github.com/pcrt/yii2-theme",
+		"issues": "https://github.com/pcrt/yii2-theme/issues"
+	},
+	"autoload": {
+		"psr-4": {
+			"pcrt\\": ""
+		}
+	}
+}
