@@ -37,13 +37,13 @@ Once the extension is installed, modify your application configuration to includ
           'pcrtmodel' => [
               'class' => 'pcrt\generators\model\Generator',
               'templates' => [
-                  'pcrt' => '@vendor/pcrt/pcrt-theme/generators/model/pcrt',
+                  'pcrt' => '@vendor/pcrt/yii2-gii/generators/model/pcrt',
               ]
           ],
           'pcrtcrud' => [
               'class' => 'pcrt\generators\crud\Generator',
               'templates' => [
-                  'pcrt' => '@vendor/pcrt/pcrt-theme/generators/crud/pcrt',
+                  'pcrt' => '@vendor/pcrt/yii2-gii/generators/crud/pcrt',
               ]
           ]
       ],
