@@ -64,6 +64,9 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+<?php if (!empty($generator->searchModelClass)): ?>    
+                    'set-filter' => ['POST'],
+<?php endif; ?>
 <?php if(count($foreignKeys) !== 0) : ?>
 <?php foreach($foreignKeys as $key): ?>
                     'get-<?=lcfirst($key['fk_table'])?>' => ['POST'],
@@ -73,9 +76,21 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             ],
         ];
     }
-
-    <?php foreach($foreignKeys as $key): ?>
-
+<?php if (!empty($generator->searchModelClass)): ?>    
+    public function actionSetFilter(){
+        $post = $request->post();
+        $model = new <?= ltrim($generator->modelClass, '\\') ?>();
+        $tablename =  <?= ltrim($generator->modelClass, '\\') ?>::model()->tableSchema->name;
+        foreach($post as $key => $val){
+          if(strpos($key, "filter__") !== false){
+            $name = str_replace("filter__","",$key);
+            $model->setFilter($name,$val);
+          }
+        }
+        return;
+    }
+<?php endif; ?>
+<?php foreach($foreignKeys as $key): ?>
     public function actionGet<?=ucfirst($key['fk_table'])?>()
     {
 
@@ -95,8 +110,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
 
     }
 
-    <?php endforeach; ?>
-
+<?php endforeach; ?>
     public function actionIndex()
     {
 <?php if (!empty($generator->searchModelClass)): ?>
@@ -117,8 +131,6 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
         ]);
 <?php endif; ?>
     }
-
-
 
     public function actionCreate()
     {
