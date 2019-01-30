@@ -33,7 +33,7 @@ class Generator extends \yii\gii\generators\crud\Generator
     // TODO: Need Improve for CamelCase ControllerClass
     $controllerClass = StringHelper::basename($this->controllerClass);
     $controllerClass = lcfirst(str_replace("Controller","",$controllerClass));
-    
+
     return "\$form->field(\$model, '$column->name')->widget(
         Select2::class,
         [
@@ -78,8 +78,38 @@ class Generator extends \yii\gii\generators\crud\Generator
         $FK[] = $fk;
       }
     }
-    \Yii::trace($FK);
     return $FK;
+  }
+
+  public function getSearchField(){
+
+    $search=[];
+    $tableSchema = $this->getTableSchema();
+    if ($tableSchema !== false){
+
+      $columns = $tableSchema->columns;
+      $fkey = $this->getForeignKeys();
+
+      // TODO: Need Improvment for Many to Many Relation
+      // Traverse every column and setting Type and FK
+      foreach($columns as $c){
+
+        $search[$c->name]['type']=$c->type;
+        // If Type is Integer find for possible FK
+        if($c->type === "integer"){
+          // Setting default FK to empty array
+          $search[$c->name]['fk'] = [];
+          foreach($fkey as $f){
+            if($f['field'] === $c->name){
+              // If match setting FK value
+              $search[$c->name]['fk'] = $f;
+            }
+          }
+        }
+      }
+    }
+    //\Yii::trace($search);
+    return $search;
   }
 
   public function generateActiveField($attribute)

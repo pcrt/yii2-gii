@@ -18,6 +18,8 @@ $rules = $generator->generateSearchRules();
 $labels = $generator->generateSearchLabels();
 $searchAttributes = $generator->getSearchAttributes();
 $searchConditions = $generator->generateSearchConditions();
+$fields = $generator->getSearchField();
+
 
 echo "<?php\n";
 ?>
@@ -78,9 +80,34 @@ class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $m
             return $dataProvider;
         }
 
-        // grid filtering conditions
-        <?= implode("\n        ", $searchConditions) ?>
+        // filtering conditions
 
+<?php foreach($fields as $key => $field): ?>
+<?php if(($field['type']==="integer" && $field['fk'] === []) || $field['type']==="double" || $field['type']==="float"): ?>
+        $<?= $key ?> = $this->getFilter('<?= $key ?>');
+        if($<?= $key ?> !== "" && $<?= $key ?> !== null){
+          $query->andFilterWhere(['=', '<?= $key ?>', $<?= $key ?>);
+        }
+<?php endif; ?>
+<?php if($field['type']==="string" || $field['type']==="text"): ?>
+        $<?= $key ?> = $this->getFilter('<?= $key ?>');
+        if($<?= $key ?> !== "" && $<?= $key ?> !== null){
+          $query->andFilterWhere(['LIKE', '<?= $key ?>', $<?= $key ?>);
+        }
+<?php endif; ?>
+<?php if($field['type']==="date" || $field['type']==="datetime"): ?>
+        $<?= $key ?> = explode("|", $this->getFilter('<?= $key ?>'));
+        if(count($<?= $key ?>) === 2){
+          $query->andFilterWhere(['BETWEEN', '<?= $key ?>', $<?= $key ?>[0], $<?= $key ?>[1]]);
+        }
+<?php endif; ?>
+<?php if($field['type']==="integer" && $field['fk'] !== []): ?>
+        $<?= $key ?> = $this->getFilter('<?= $key ?>');
+        if($<?= $key ?> !== "" && $<?= $key ?> !== null){
+          $query->andFilterWhere(['IN', '<?= $key ?>', $<?= $key ?>]);
+        }
+<?php endif; ?>
+<?php endforeach; ?>
         return $dataProvider;
     }
 }
