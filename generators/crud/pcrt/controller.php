@@ -64,7 +64,8 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
-<?php if (!empty($generator->searchModelClass)): ?>    
+                    'list' => ['GET'],
+<?php if (!empty($generator->searchModelClass)): ?>
                     'set-filter' => ['POST'],
 <?php endif; ?>
 <?php if(count($foreignKeys) !== 0) : ?>
@@ -76,11 +77,11 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
             ],
         ];
     }
-<?php if (!empty($generator->searchModelClass)): ?>    
+<?php if (!empty($generator->searchModelClass)): ?>
     public function actionSetFilter(){
+        $request = Yii::$app->request;
         $post = $request->post();
-        $model = new <?= ltrim($generator->modelClass, '\\') ?>();
-        $tablename =  <?= ltrim($generator->modelClass, '\\') ?>::model()->tableSchema->name;
+        $model = new \<?= ltrim($generator->modelClass, '\\') ?>();
         foreach($post as $key => $val){
           if(strpos($key, "filter__") !== false){
             $name = str_replace("filter__","",$key);
@@ -97,7 +98,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
       // TODO: Adjust a text filed to mach correct field lookup
       // Adjust a query filter column to match your need
       // Also possible to add an additional filter to query
-      
+
       $request = Yii::$app->request;
       $query = $request->post('query');
       $page = $request->post('page');
@@ -111,25 +112,38 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     }
 
 <?php endforeach; ?>
+
+    public function actionList($pageNumber=0,$pageSize=50){
+<?php if($generator->indexWidgetType === 'grid'): ?>
+      \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+<?php endif; ?>
+      if($pageSize == ""){
+        $pageSize = 50;
+      }
+      $searchModel = new <?= isset($searchModelAlias) ? $searchModelAlias : $searchModelClass ?>();
+      $dataProvider = $searchModel->search();
+
+      $dataProvider->pagination = [
+              'pageSize'=>$pageSize,
+              'page'=>$pageNumber-1,
+      ];
+      $result = $dataProvider->getTotalCount();
+      $data = $this->renderAjax('_list', [
+          'searchModel' => $searchModel,
+          'dataProvider' => $dataProvider,
+      ]);
+<?php if($generator->indexWidgetType === 'grid'): ?>
+      return ['html'=>$data,'total'=>$result];
+<?php else: ?>
+      return $data;
+<?php endif; ?>
+
+    }
+
     public function actionIndex()
     {
-<?php if (!empty($generator->searchModelClass)): ?>
         $searchModel = new <?= isset($searchModelAlias) ? $searchModelAlias : $searchModelClass ?>();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-<?php else: ?>
-        $dataProvider = new ActiveDataProvider([
-            'query' => <?= $modelClass ?>::find(),
-        ]);
-
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
-        ]);
-<?php endif; ?>
+        return $this->render('index', ['searchModel' => $searchModel]);
     }
 
     public function actionCreate()

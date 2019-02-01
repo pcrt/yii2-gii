@@ -33,7 +33,7 @@ class Generator extends \yii\gii\generators\crud\Generator
     // TODO: Need Improve for CamelCase ControllerClass
     $controllerClass = StringHelper::basename($this->controllerClass);
     $controllerClass = lcfirst(str_replace("Controller","",$controllerClass));
-    
+
     if(!$isfilter){
       return "\$form->field(\$model, '$column->name')->widget(
           Select2::class,
@@ -58,25 +58,29 @@ class Generator extends \yii\gii\generators\crud\Generator
           ]
       );";
     }else{
-      return "Select2::widget([
-        'name' => 'filter__$column->name',
-        'clientOptions' => [
-          'ajax' => [
-            'url' => 'index.php?r=$controllerClass/get-$fktable',
-            'delay' => '250',
-            'type' => 'POST',
-            'dataType' => 'json',
-            'data' => new JsExpression('function (params) {
-                return {
-                  query: params.term || \"\",
-                  page: params.page || 0,
-                  _csrf : yii.getCsrfToken()
-                }
-            }')
-          ],
-          'cache' => 'false'
-        ]
-      ]);";
+      return "\$form->field(\$model, '$column->name')->widget(
+          Select2::class,
+          [
+              'items' => [],
+              'options' =>['name' => 'filter__$column->name'],
+              'clientOptions' => [
+                'ajax' => [
+                  'url' => 'index.php?r=$controllerClass/get-$fktable',
+                  'delay' => '250',
+                  'type' => 'POST',
+                  'dataType' => 'json',
+                  'data' => new JsExpression('function (params) {
+                      return {
+                        query: params.term || \"\",
+                        page: params.page || 0,
+                        _csrf : yii.getCsrfToken()
+                      }
+                  }')
+                ],
+                'cache' => 'false'
+              ]
+          ]
+      );";
     }
   }
 
@@ -137,7 +141,7 @@ class Generator extends \yii\gii\generators\crud\Generator
   public function generateActiveField($attribute)
   {
       $tableSchema = $this->getTableSchema();
-      
+
       if ($tableSchema === false || !isset($tableSchema->columns[$attribute])) {
           if (preg_match('/^(password|pass|passwd|passcode)$/i', $attribute)) {
               return "\$form->field(\$model, '$attribute')->passwordInput()";
@@ -147,7 +151,7 @@ class Generator extends \yii\gii\generators\crud\Generator
 
       $column = $tableSchema->columns[$attribute];
       $fk = $this->getForeignKeys();
-      
+
       foreach($fk as $f){
         if($f['field']==$column->name){
           return $this->generateSelect2ActiveField($tableSchema,$column,$f['fk_table'],false);
@@ -160,25 +164,27 @@ class Generator extends \yii\gii\generators\crud\Generator
   public function generateActiveSearchField($attribute)
   {
       $tableSchema = $this->getTableSchema();
-      
+
       if ($tableSchema === false) {
-          return "Html::textInput('filter__$attribute', '', options[]);";
+          //return "Html::textInput('filter__$attribute', '', ['class' => 'form-control']);";
+          return "\$form->field(\$model, '$attribute')->textInput(['name' => 'filter__$attribute', 'class' => 'form-control' ])";
       }
-      
+
       $column = $tableSchema->columns[$attribute];
-      
+
       $fk = $this->getForeignKeys();
       foreach($fk as $f){
         if($f['field']==$column->name){
           return $this->generateSelect2ActiveField($tableSchema,$column,$f['fk_table'],true);
         }
       }
-      
+
       if ($column->phpType === 'boolean') {
-          return "Html::checkbox('filter__$attribute', false, options[]);";
+          return "Html::checkbox('filter__$attribute', false, ['class' => 'form-control']);";
       }
-      
-      return "Html::textInput('filter__$attribute', '', options[]);";
+
+      //return "Html::textInput('filter__$attribute', '', ['class' => 'form-control']);";
+      return "\$form->field(\$model, '$attribute')->textInput(['name' => 'filter__$attribute', 'class' => 'form-control' ])";
   }
-  
+
 }

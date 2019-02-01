@@ -16,6 +16,7 @@ echo "<?php\n";
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use pcrt\widgets\select2\Select2;
+use yii\web\JsExpression;
 
 ?>
 
@@ -23,7 +24,7 @@ use pcrt\widgets\select2\Select2;
 
     <?= "<?php " ?>$form = ActiveForm::begin([
         'action' => [''],
-        'method' => '',
+        'method' => 'POST',
         'id' => 'filter_table'
 <?php if ($generator->enablePjax): ?>
         'options' => [
@@ -41,7 +42,9 @@ foreach ($generator->getColumnNames() as $attribute) {
         echo "    <?php /* echo " . $generator->generateActiveSearchField($attribute) . " */?>\n\n";
     }
 }
+
 ?>
+
     <div class="form-group">
         <?= "<?= " ?>Html::Button(<?= $generator->generateString('Apply') ?>, ['class' => 'btn btn-primary', 'id'=>'apply_filter']) ?>
         <?= "<?= " ?>Html::Button(<?= $generator->generateString('Reset') ?>, ['class' => 'btn btn-default', 'id'=>'reset_filter']) ?>
@@ -53,21 +56,23 @@ foreach ($generator->getColumnNames() as $attribute) {
 
 <script type="text/javascript">
 
-  var apply_filter = document.getElementsById('apply_filter');
+  var apply_filter = document.getElementById('apply_filter');
   apply_filter.addEventListener('click', function() {
-    var filter_table = document.getElementsById('filter_table');
-    var data = new FormData(filter_table);
+    var filter_table = $('#filter_table');
+    var data = filter_table.serialize();
     var xhr = new XMLHttpRequest();
     xhr.open("POST", 'index.php?r=<?=$controllerName?>/set-filter', true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    
-    xhr.onreadystatechange = function() { 
+
+    xhr.onreadystatechange = function() {
       if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
         // TODO: Need Function to reload content widget
+
+        window.reload_table();
+        
       }
     }
-    
     xhr.send(data);
   }, false);
-  
+
 </script>

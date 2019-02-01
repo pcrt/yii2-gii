@@ -62,7 +62,7 @@ class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $m
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search()
     {
         $query = <?= isset($modelAlias) ? $modelAlias : $modelClass ?>::find();
 
@@ -70,15 +70,8 @@ class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $m
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' =>false
         ]);
-
-        $this->load($params);
-
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
-            return $dataProvider;
-        }
 
         // filtering conditions
 
@@ -86,13 +79,13 @@ class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $m
 <?php if(($field['type']==="integer" && $field['fk'] === []) || $field['type']==="double" || $field['type']==="float"): ?>
         $<?= $key ?> = $this->getFilter('<?= $key ?>',null);
         if($<?= $key ?> !== "" && $<?= $key ?> !== null){
-          $query->andFilterWhere(['=', '<?= $key ?>', $<?= $key ?>);
+          $query->andFilterWhere(['=', '<?= $key ?>', $<?= $key ?>]);
         }
 <?php endif; ?>
 <?php if($field['type']==="string" || $field['type']==="text"): ?>
         $<?= $key ?> = $this->getFilter('<?= $key ?>',null);
         if($<?= $key ?> !== "" && $<?= $key ?> !== null){
-          $query->andFilterWhere(['LIKE', '<?= $key ?>', $<?= $key ?>);
+          $query->andFilterWhere(['LIKE', '<?= $key ?>', $<?= $key ?>]);
         }
 <?php endif; ?>
 <?php if($field['type']==="date" || $field['type']==="datetime"): ?>

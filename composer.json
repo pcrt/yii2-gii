@@ -17,6 +17,11 @@
 		"source": "https://github.com/pcrt/yii2-gii",
 		"issues": "https://github.com/pcrt/yii2-gii/issues"
 	},
+	"require": {
+		"php": ">=7.0",
+		"pcrt/yii2-select2": "@dev",
+		"pcrt/yii2-ajax-pager": "@dev"
+	},
 	"autoload": {
 		"psr-4": {
 			"pcrt\\": ""
