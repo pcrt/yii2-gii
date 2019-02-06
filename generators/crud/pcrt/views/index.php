@@ -22,27 +22,24 @@ use yii\web\JsExpression;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = <?= $generator->generateString(Inflector::pluralize(Inflector::camel2words(StringHelper::basename($generator->modelClass)))) ?>;
-$this->params['breadcrumbs'][] = $this->title;
+//$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-index">
 
-<h1><?= "<?= " ?>Html::encode($this->title) ?></h1>
+  <?= "<?php " ?>$this->beginBlock('actionButtons') ?>
+      <?= "<?= " ?>Html::a(<?= $generator->generateString('<i class="fas fa-plus"></i> Nuovo ' . Inflector::camel2words(StringHelper::basename($generator->modelClass))) ?>, ['create'], ['class' => 'btn btn-success']) ?>
+  <?= "<?php " ?>$this->endBlock() ?>
 
 <?= $generator->enablePjax ? "    <?php Pjax::begin(); ?>\n" : '' ?>
 <?php if(!empty($generator->searchModelClass)): ?>
 <?= "    <?php " . ($generator->indexWidgetType === 'grid' ? "// " : "") ?>echo $this->render('_search', ['model' => $searchModel]); ?>
 <?php endif; ?>
-
-    <p>
-        <?= "<?= " ?>Html::a(<?= $generator->generateString('Create ' . Inflector::camel2words(StringHelper::basename($generator->modelClass))) ?>, ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-
-
+<?php $append = ($generator->indexWidgetType !== 'grid') ? "'append'=>'.pcrt-card'," : ""; ?>
 <?php echo "
     <?php Paginator::begin([
       'type' => ".$type.",
       'url' => 'index.php?r=".$controllerName."/list',
+      " . $append . "
       'pageSize' => 30,
       'view' => \$this,
     ]) ?>

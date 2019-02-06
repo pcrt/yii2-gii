@@ -18,12 +18,13 @@ echo "<?php\n";
 ?>
 
 use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
+use yii\bootstrap4\ActiveForm;
 <?php if(count($foreignKeys) !== 0) : ?>
 use pcrt\widgets\select2\Select2;
-use yii\web\JsExpression;
-<?php endif; ?>
 
+<?php endif; ?>
+use pcrt\widgets\datepicker\Datepicker;
+use yii\web\JsExpression;
 
 /* @var $this yii\web\View */
 /* @var $model <?= ltrim($generator->modelClass, '\\') ?> */

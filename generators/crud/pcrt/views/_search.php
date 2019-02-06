@@ -17,6 +17,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use pcrt\widgets\select2\Select2;
 use yii\web\JsExpression;
+use pcrt\widgets\datepicker\Datepicker;
 
 ?>
 
@@ -69,7 +70,7 @@ foreach ($generator->getColumnNames() as $attribute) {
         // TODO: Need Function to reload content widget
 
         window.reload_table();
-        
+
       }
     }
     xhr.send(data);
