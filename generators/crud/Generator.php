@@ -116,67 +116,52 @@ class Generator extends \yii\gii\generators\crud\Generator
   * TODO: Move locale to template for code optimization
   * TODO: I18n Support
   */
-  private function generateDateTimepickerActiveField($table, $column, $type, $isfilter)
+  private function generateDatePickerActiveField($table, $column, $type, $isfilter)
   {
-    $locale = '[
-        "format"=>"DD/MM/YYYY",
-        "separator" => " - ",
-        "applyLabel" => "Applica",
-        "cancelLabel" => "Cancella",
-        "fromLabel" => "From",
-        "toLabel" => "To",
-        "customRangeLabel" => "Custom",
-        "weekLabel" => "W",
-        "daysOfWeek" => [
-            "Dom",
-            "Lun",
-            "Mar",
-            "Mer",
-            "Gio",
-            "Ven",
-            "Sab"
-        ],
-        "monthNames" => [
-            "Gennaio",
-            "Febbraio",
-            "Marzo",
-            "Aprile",
-            "Maggio",
-            "Giugno",
-            "Luglio",
-            "Agosto",
-            "Settembre",
-            "Ottobre",
-            "Novembre",
-            "Dicembre"
-        ],
-        "firstDay" => 1
-    ]';
-
     if(!$isfilter){
-      return "\$form->field(\$model, '$column->name')->widget(
+      return "\$form->field(\$model, '$column')->widget(
           Datepicker::class,
           [
               'clientOptions' => [
-                'singleDatePicker' => true,
-                'showDropdowns' => true,
-                'locale' => ".$locale."
-
+                'altInput'=>true,
+                'altFormat'=>'d/m/Y',
+                'dateFormat'=>'Y-m-d',
+                'locale' => 'it'
               ]
           ]
       );";
     }else{
-      return "\$form->field(\$model, '$column->name')->widget(
+      return "\$form->field(\$model, '$column')->widget(
           Datepicker::class,
           [
-              'options' =>['name' => 'filter__$column->name'],
+              'options' =>['name' => 'filter__$column'],
               'clientOptions' => [
-                'showDropdowns' => true,
-                'locale' => ".$locale."
+                'altInput'=>true,
+                'altFormat'=>'d/m/Y',
+                'dateFormat'=>'Y-m-d',
+                'locale' => 'it',
+                'mode'=>'range',
               ]
           ]
       );";
     }
+  }
+
+  private function generateTimePickerActiveField($table, $column, $type)
+  {
+      return "\$form->field(\$model, '$column')->widget(
+          Datepicker::class,
+          [
+              'clientOptions' => [
+                'altInput'=>true,
+                'altFormat'=>'H:i',
+                'dateFormat'=>'H:i:s',
+                'locale' => 'it'
+                'enableTime'=> true,
+                'noCalendar'=> true,
+              ]
+          ]
+      );";
   }
 
   /**
@@ -258,12 +243,16 @@ class Generator extends \yii\gii\generators\crud\Generator
 
       foreach($fk as $f){
         if($f['field']==$column->name){
-          return $this->generateSelect2ActiveField($tableSchema,,$f['fk_table'],false);
+          return $this->generateSelect2ActiveField($tableSchema,$column->name,$f['fk_table'],false);
         }
       }
 
       if ($column->type === 'date' || $column->type === 'datetime') {
-          return $this->generateDateTimepickerActiveField($tableSchema,$column->name,'date',false);
+          return $this->generateDatePickerActiveField($tableSchema,$column->name,'date',false);
+      }
+
+      if ($column->type === 'time' ) {
+          return $this->generateTimePickerActiveField($tableSchema,$column->name,'date');
       }
 
       return parent::generateActiveField($attribute);
@@ -295,7 +284,11 @@ class Generator extends \yii\gii\generators\crud\Generator
       }
 
       if ($column->type === 'date' || $column->type === 'datetime') {
-          return $this->generateDateTimepickerActiveField($tableSchema,$column->name,'date',true);
+          return $this->generateDatePickerActiveField($tableSchema,$column->name,'date',true);
+      }
+
+      if ($column->type === 'time' ) {
+          return $this->generateTimePickerActiveField($tableSchema,$column->name,'date');
       }
 
       //return "Html::textInput('filter__$attribute', '', ['class' => 'form-control']);";
