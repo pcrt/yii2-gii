@@ -54,12 +54,41 @@ class Generator extends \yii\gii\generators\crud\Generator
     // TODO: Need Improve for CamelCase ControllerClass
     $controllerClass = StringHelper::basename($this->controllerClass);
     $controllerClass = lcfirst(str_replace("Controller","",$controllerClass));
+    $ret = "";
+    
+    if(!$isfilter){
+      $ret = "// Need to change the lookup text field to adjust with 
+      // the correct column name
+      \$value = [];
+      if(is_numeric(\$model->$column)){ 
+        \$query = (new \yii\db\Query())
+          ->select(['id as id', 'description as text'])
+          ->from('$fk_table')
+          ->where(['=', 'id', \$model->$column])->one();
+        \$value['id'] = \$query->id;
+        \$value['text'] = \$query->description;
+      }\n";
+    }else{  
+      $ret = "// Need to change the lookup text field to adjust with 
+      // the correct column name
+      \$value = [];
+      \$filter_$column = \$model->getFilter('$column',null);
+      if(is_numeric(\$filter_$column)){ 
+        \$query = (new \yii\db\Query())
+          ->select(['id as id', 'description as text'])
+          ->from('$fk_table')
+          ->where(['=', 'id', \$filter_$column])->one();
+        \$value['id'] = \$query->id;
+        \$value['text'] = \$query->description;
+      }\n";
+      
+    }
 
     if(!$isfilter){
-      return "\$form->field(\$model, '$column')->widget(
+      $ret .= "\$form->field(\$model, '$column')->widget(
           Select2::class,
           [
-              'items' => [],
+              'items' => [\$value],
               'clientOptions' => [
                 'ajax' => [
                   'url' => 'index.php?r=$controllerClass/get-$fktable',
@@ -79,7 +108,7 @@ class Generator extends \yii\gii\generators\crud\Generator
           ]
       );";
     }else{
-      return "\$form->field(\$model, '$column')->widget(
+      $ret .="\$form->field(\$model, '$column')->widget(
           Select2::class,
           [
               'items' => [],
@@ -103,6 +132,7 @@ class Generator extends \yii\gii\generators\crud\Generator
           ]
       );";
     }
+    return $ret;
   }
 
 
