@@ -63,7 +63,7 @@ class Generator extends \yii\gii\generators\crud\Generator
       if(is_numeric(\$model->$column)){ 
         \$query = (new \yii\db\Query())
           ->select(['id as id', 'description as text'])
-          ->from('$fk_table')
+          ->from('$fktable')
           ->where(['=', 'id', \$model->$column])->one();
         \$value['id'] = \$query->id;
         \$value['text'] = \$query->description;
@@ -76,7 +76,7 @@ class Generator extends \yii\gii\generators\crud\Generator
       if(is_numeric(\$filter_$column)){ 
         \$query = (new \yii\db\Query())
           ->select(['id as id', 'description as text'])
-          ->from('$fk_table')
+          ->from('$fktable')
           ->where(['=', 'id', \$filter_$column])->one();
         \$value['id'] = \$query->id;
         \$value['text'] = \$query->description;
