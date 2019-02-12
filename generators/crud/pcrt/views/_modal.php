@@ -1,6 +1,6 @@
-<?php 
-
-echo "
+<?php
+echo "<?php\n";
+?>
 use yii\bootstrap4\Modal;
 
 Modal::begin([
@@ -8,8 +8,6 @@ Modal::begin([
      'toggleButton' => ['label' => 'Chiudi'],
 ]);
 
-\$this->renderPartial('_form');
+$this->renderPartial('_form');
 
 Modal::end();
-
-";

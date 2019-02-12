@@ -83,7 +83,7 @@ class Generator extends \yii\gii\generators\crud\Generator
     }
 
     if(!$isfilter){
-      $ret .= "\$form->field(\$model, '$column')->widget(
+      $ret .= "echo \$form->field(\$model, '$column')->widget(
           Select2::class,
           [
               'items' => \$value,
@@ -106,7 +106,7 @@ class Generator extends \yii\gii\generators\crud\Generator
           ]
       );";
     }else{
-      $ret .="\$form->field(\$model, '$column')->widget(
+      $ret .="echo \$form->field(\$model, '$column')->widget(
           Select2::class,
           [
               'items' => \$value,
@@ -263,7 +263,7 @@ class Generator extends \yii\gii\generators\crud\Generator
           if (preg_match('/^(password|pass|passwd|passcode)$/i', $attribute)) {
               return "\$form->field(\$model, '$attribute')->passwordInput()";
           }
-          return "\$form->field(\$model, '$attribute')";
+          return " echo " . "\$form->field(\$model, '$attribute')";
       }
 
       $column = $tableSchema->columns[$attribute];
@@ -276,14 +276,14 @@ class Generator extends \yii\gii\generators\crud\Generator
       }
 
       if ($column->type === 'date' || $column->type === 'datetime') {
-          return $this->generateDatePickerActiveField($tableSchema,$column->name,'date',false);
+          return " echo " . $this->generateDatePickerActiveField($tableSchema,$column->name,'date',false);
       }
 
       if ($column->type === 'time' ) {
-          return $this->generateTimePickerActiveField($tableSchema,$column->name,'date');
+          return " echo " . $this->generateTimePickerActiveField($tableSchema,$column->name,'date');
       }
 
-      return parent::generateActiveField($attribute);
+      return " echo " . parent::generateActiveField($attribute);
   }
 
   /**
@@ -295,7 +295,7 @@ class Generator extends \yii\gii\generators\crud\Generator
 
       if ($tableSchema === false) {
           //return "Html::textInput('filter__$attribute', '', ['class' => 'form-control']);";
-          return "\$form->field(\$model, '$attribute')->textInput(['name' => 'filter__$attribute', 'class' => 'form-control' ])";
+          return " echo \$form->field(\$model, '$attribute')->textInput(['name' => 'filter__$attribute', 'class' => 'form-control' ])";
       }
 
       $column = $tableSchema->columns[$attribute];
@@ -308,19 +308,19 @@ class Generator extends \yii\gii\generators\crud\Generator
       }
 
       if ($column->phpType === 'boolean') {
-          return "Html::checkbox('filter__$attribute', false, ['class' => 'form-control']);";
+          return " echo " . "Html::checkbox('filter__$attribute', false, ['class' => 'form-control']);";
       }
 
       if ($column->type === 'date' || $column->type === 'datetime') {
-          return $this->generateDatePickerActiveField($tableSchema,$column->name,'date',true);
+          return " echo " . $this->generateDatePickerActiveField($tableSchema,$column->name,'date',true);
       }
 
       if ($column->type === 'time' ) {
-          return $this->generateTimePickerActiveField($tableSchema,$column->name,'date');
+          return " echo " . $this->generateTimePickerActiveField($tableSchema,$column->name,'date');
       }
 
       //return "Html::textInput('filter__$attribute', '', ['class' => 'form-control']);";
-      return "\$form->field(\$model, '$attribute')->textInput(['name' => 'filter__$attribute', 'class' => 'form-control' ])";
+      return " echo \$form->field(\$model, '$attribute')->textInput(['name' => 'filter__$attribute', 'class' => 'form-control' ])";
   }
 
 }
