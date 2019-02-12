@@ -1,5 +1,7 @@
 <?php
 use yii\web\JsExpression;
+use yii\helpers\Inflector;
+use yii\helpers\StringHelper;
 
 $formid = 'modal_'.Inflector::camel2id(StringHelper::basename($generator->modelClass));
 $modaliderror = $formid."_error";
