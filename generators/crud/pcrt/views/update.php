@@ -12,6 +12,9 @@ $nameAttributeTemplate = '$model->' . $generator->getNameAttribute();
 $titleTemplate = $generator->generateString('Update ' . $modelClassName . ': {name}', ['name' => '{nameAttribute}']);
 $formid = Inflector::camel2id(StringHelper::basename($generator->modelClass)). "_form";
 
+$controllerClass = StringHelper::basename($generator->controllerClass);
+$controllerName = lcfirst(str_replace("Controller","",$controllerClass));
+
 if ($generator->enableI18N) {
     $title = strtr($titleTemplate, ['\'{nameAttribute}\'' => $nameAttributeTemplate]);
 } else {
@@ -34,7 +37,8 @@ $this->params['breadcrumbs'][] = <?= $generator->generateString('Update') ?>;
 ?>
 
 <?= "<?php " ?>$this->beginBlock('actionButtons') ?>
-    <?= "<?= " ?>Html::a('<i class="fas fa-plus"></i> Salva' , ['class' => 'btn btn-success', 'form' => '<?= $formid ?>' ]) ?>
+<?= "<?= " ?>Html::SubmitButton('<i class="fas fa-plus"></i> Salva' , ['class' => 'btn btn-success', 'form' => '<?= $formid ?>' ]) ?> <?= "\n" ?>
+<?= "<a href=\"?r=$controllerName\" class='btn btn-secondary'><i class='fas fa-times'></i> Cancella</a>"; ?> <?= "\n" ?>
 <?= "<?php " ?>$this->endBlock() ?>
 
 
