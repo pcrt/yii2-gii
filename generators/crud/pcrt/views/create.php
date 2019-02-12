@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <?= "<?php " ?>$this->beginBlock('actionButtons') ?>
-    <?= "<?= " ?>Html::a('<i class="fas fa-plus"></i> Nuovo', ['create'], ['class' => 'btn btn-success']) ?>
+    <?= "<?= " ?>Html::a('<i class="fas fa-plus"></i> Salva', ['create'], ['class' => 'btn btn-success']) ?>
 <?= "<?php " ?>$this->endBlock() ?>
 
 <div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-create">

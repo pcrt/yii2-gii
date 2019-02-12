@@ -92,7 +92,7 @@ class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $m
         }
 <?php endif; ?>
 <?php if($field['type']==="date" || $field['type']==="datetime"): ?>
-        $<?= $key ?> = explode("|", $this->getFilter('<?= $key ?>',""));
+        $<?= $key ?> = explode(" - ", $this->getFilter('<?= $key ?>',""));
         if(count($<?= $key ?>) === 2){
           $query->andFilterWhere(['BETWEEN', '<?= $key ?>', $<?= $key ?>[0], $<?= $key ?>[1]]);
         }

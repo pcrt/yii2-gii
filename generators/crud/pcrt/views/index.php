@@ -27,7 +27,7 @@ $this->title = <?= $generator->generateString(Inflector::pluralize(Inflector::ca
 <div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-index">
 
   <?= "<?php " ?>$this->beginBlock('actionButtons') ?>
-      <?= "<?= " ?>Html::a('<i class="fas fa-plus"></i> Nuovo') ?>, ['create'], ['class' => 'btn btn-success']) ?>
+      <?= "<?= " ?>Html::a('<i class="fas fa-plus"></i> Nuovo' ?>, ['create'], ['class' => 'btn btn-success']) ?>
   <?= "<?php " ?>$this->endBlock() ?>
 
 <?= $generator->enablePjax ? "    <?php Pjax::begin(); ?>\n" : '' ?>

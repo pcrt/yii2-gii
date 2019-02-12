@@ -52,7 +52,7 @@ use yii\web\JsExpression;
 
 <?php foreach ($generator->getColumnNames() as $attribute) {
     if (in_array($attribute, $safeAttributes)) {
-        echo "    <?= " . $generator->generateActiveField($attribute) . " ?>\n\n";
+        echo "    <?php " . $generator->generateActiveField($attribute) . " ?>\n\n";
     }
 } ?>
     <div class="form-group">
