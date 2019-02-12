@@ -180,7 +180,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
         }
         
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect('index');
+            return $this->redirect(['index']);
         }
 
         return $this->render('create', [
@@ -197,7 +197,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect('index');
+            return $this->redirect(['index']);
         }
 
         return $this->render('update', [

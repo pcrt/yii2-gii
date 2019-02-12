@@ -17,7 +17,7 @@ Modal::begin([
      'toggleButton' => ['label' => 'Chiudi'],
 ]);
 <div id="modal_" style="display:none;"></div>
-$this->renderPartial('_form'['formname' => '<?= $formid ?>']);
+$this->renderPartial('_form'['model' => $model, 'formname' => '<?= $formid ?>']);
 
 Modal::end();
 

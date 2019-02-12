@@ -10,6 +10,8 @@ $urlParams = $generator->generateUrlParams();
 $modelClassName = Inflector::camel2words(StringHelper::basename($generator->modelClass));
 $nameAttributeTemplate = '$model->' . $generator->getNameAttribute();
 $titleTemplate = $generator->generateString('Update ' . $modelClassName . ': {name}', ['name' => '{nameAttribute}']);
+$formid = Inflector::camel2id(StringHelper::basename($generator->modelClass)). "_form";
+
 if ($generator->enableI18N) {
     $title = strtr($titleTemplate, ['\'{nameAttribute}\'' => $nameAttributeTemplate]);
 } else {
@@ -32,7 +34,7 @@ $this->params['breadcrumbs'][] = <?= $generator->generateString('Update') ?>;
 ?>
 
 <?= "<?php " ?>$this->beginBlock('actionButtons') ?>
-    <?= "<?= " ?>Html::a('<i class="fas fa-plus"></i> Salva' , ['create'], ['class' => 'btn btn-success']) ?>
+    <?= "<?= " ?>Html::a('<i class="fas fa-plus"></i> Salva' , ['class' => 'btn btn-success', 'form' => '<?= $formid ?>' ]) ?>
 <?= "<?php " ?>$this->endBlock() ?>
 
 
@@ -40,6 +42,7 @@ $this->params['breadcrumbs'][] = <?= $generator->generateString('Update') ?>;
 
     <?= '<?= ' ?>$this->render('_form', [
         'model' => $model,
+        'formname' => '<?= $formid ?>'
     ]) ?>
 
 </div>
