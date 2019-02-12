@@ -14,6 +14,9 @@ if (empty($safeAttributes)) {
     $safeAttributes = $model->attributes();
 }
 
+$controllerClass = StringHelper::basename($generator->controllerClass);
+$controllerName = lcfirst(str_replace("Controller","",$controllerClass));
+
 echo "<?php\n";
 ?>
 
@@ -56,8 +59,10 @@ use yii\web\JsExpression;
         echo "    <?php " . $generator->generateActiveField($attribute) . " ?>\n\n";
     }
 } ?>
+    
     <div class="form-group">
-        <?= "<?= " ?>Html::submitButton(<?= $generator->generateString('Save') ?>, ['class' => 'btn btn-success']) ?>
+        <?= "<a href=\"?r=$controllerName\" class='btn btn-secondary'><i class='fas fa-times'></i> Cancella</a>"; ?> <?= "\n" ?>
+        <?= "<?= " ?>Html::submitButton('<i class="fas fa-plus"></i> Salva', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?= "<?php " ?>ActiveForm::end(); ?>

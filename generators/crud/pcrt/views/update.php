@@ -37,8 +37,8 @@ $this->params['breadcrumbs'][] = <?= $generator->generateString('Update') ?>;
 ?>
 
 <?= "<?php " ?>$this->beginBlock('actionButtons') ?>
-<?= "<?= " ?>Html::SubmitButton('<i class="fas fa-plus"></i> Salva' , ['class' => 'btn btn-success', 'form' => '<?= $formid ?>' ]) ?> <?= "\n" ?>
 <?= "<a href=\"?r=$controllerName\" class='btn btn-secondary'><i class='fas fa-times'></i> Cancella</a>"; ?> <?= "\n" ?>
+<?= "<?= " ?>Html::SubmitButton('<i class="fas fa-plus"></i> Salva' , ['class' => 'btn btn-success', 'form' => '<?= $formid ?>' ]) ?> <?= "\n" ?>
 <?= "<?php " ?>$this->endBlock() ?>
 
 
