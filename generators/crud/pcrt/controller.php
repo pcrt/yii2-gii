@@ -158,6 +158,9 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     }
     
     public function ajaxSave(){
+      
+      $model = new <?= $modelClass ?>();
+      
       if ($model->load(Yii::$app->request->post()) && $model->save()) {
           Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
           return [

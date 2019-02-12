@@ -39,18 +39,18 @@ use yii\web\JsExpression;
     <?= "<?php " ?>$form = ActiveForm::begin(
           [
             // TODO : Setting the form property
-            /*'layout' => 'horizontal',
+            'layout' => 'horizontal',
             'fieldConfig' => [
-                'id' => '<?php echo "<php echo " . "(isset(\$formname) ? \$formname : '" . Inflector::camel2id(StringHelper::basename($generator->modelClass)) . "' . rand () ) ?>" ?>',
-                'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
+                'id' => <?php echo "(isset(\$formname)) ? \$formname : '" . Inflector::camel2id(StringHelper::basename($generator->modelClass)) . "' . rand ()" ?>,
+                /*'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
                 'horizontalCssClasses' => [
                     'label' => 'col-sm-4',
                     'offset' => 'offset-sm-4',
                     'wrapper' => 'col-sm-8',
                     'error' => '',
                     'hint' => '',
-                ],
-            ],*/
+                ],*/
+            ],
           ]
     ); ?>
 
