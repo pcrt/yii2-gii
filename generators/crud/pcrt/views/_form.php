@@ -38,6 +38,7 @@ use yii\web\JsExpression;
             // TODO : Setting the form property
             /*'layout' => 'horizontal',
             'fieldConfig' => [
+                'id' => '<?= (isset($formname) ? $formname : Inflector::camel2id(StringHelper::basename($generator->modelClass)) . rand () ) ?>'
                 'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
                 'horizontalCssClasses' => [
                     'label' => 'col-sm-4',

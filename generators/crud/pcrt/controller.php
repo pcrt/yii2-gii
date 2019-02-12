@@ -156,11 +156,29 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
         $searchModel = new <?= isset($searchModelAlias) ? $searchModelAlias : $searchModelClass ?>();
         return $this->render('index', ['searchModel' => $searchModel]);
     }
+    
+    public function ajaxSave(){
+      if ($model->load(Yii::$app->request->post()) && $model->save()) {
+          Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+          return [
+            'code' => 200
+          ];
+      }else{
+          return [
+            'code' => 500,
+            'errors' => Html::errorSummary($model, ['encode' => false]);
+          ];
+      }
+    }
 
     public function actionCreate()
     {
         $model = new <?= $modelClass ?>();
-
+        
+        if (Yii::$app->request->isAjax) {
+          this->ajaxSave();
+        }
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect('index');
         }
@@ -173,6 +191,10 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     public function actionUpdate(<?= $actionParams ?>)
     {
         $model = $this->findModel(<?= $actionParams ?>);
+        
+        if (Yii::$app->request->isAjax) {
+          this->ajaxSave();
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect('index');
