@@ -38,7 +38,7 @@ use pcrt\widgets\datepicker\Datepicker;
 $count = 0;
 foreach ($generator->getColumnNames() as $attribute) {
     if (++$count < 6) {
-        echo "    <?= " . $generator->generateActiveSearchField($attribute) . " ?>\n\n";
+        echo "    <?php echo" . $generator->generateActiveSearchField($attribute) . " ?>\n\n";
     } else {
         echo "    <?php /* echo " . $generator->generateActiveSearchField($attribute) . " */?>\n\n";
     }

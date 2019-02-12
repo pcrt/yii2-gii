@@ -65,8 +65,7 @@ class Generator extends \yii\gii\generators\crud\Generator
           ->select(['id as id', 'description as text'])
           ->from('$fktable')
           ->where(['=', 'id', \$model->$column])->one();
-        \$value['id'] = \$query->id;
-        \$value['text'] = \$query->description;
+        \$value = [\$query['id'] => \$query['description']];
       }\n";
     }else{  
       $ret = "// Need to change the lookup text field to adjust with 
@@ -78,8 +77,7 @@ class Generator extends \yii\gii\generators\crud\Generator
           ->select(['id as id', 'description as text'])
           ->from('$fktable')
           ->where(['=', 'id', \$filter_$column])->one();
-        \$value['id'] = \$query->id;
-        \$value['text'] = \$query->description;
+        \$value = [\$query['id'] => \$query['description']];
       }\n";
       
     }
@@ -88,7 +86,7 @@ class Generator extends \yii\gii\generators\crud\Generator
       $ret .= "\$form->field(\$model, '$column')->widget(
           Select2::class,
           [
-              'items' => [\$value],
+              'items' => \$value,
               'clientOptions' => [
                 'ajax' => [
                   'url' => 'index.php?r=$controllerClass/get-$fktable',
@@ -111,7 +109,7 @@ class Generator extends \yii\gii\generators\crud\Generator
       $ret .="\$form->field(\$model, '$column')->widget(
           Select2::class,
           [
-              'items' => [],
+              'items' => \$value,
               'options' =>['name' => 'filter__$column'],
               'clientOptions' => [
                 'ajax' => [
