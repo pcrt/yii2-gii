@@ -23,7 +23,7 @@
 		"yiisoft/yii2-bootstrap4": "~2.0.0",
 		"pcrt/yii2-select2": "@dev",
 		"pcrt/yii2-ajax-pager": "@dev",
-		"pcrt/yii2-datepicker": "@dev",
+		"pcrt/yii2-datepicker": "@dev"
 	},
 	"autoload": {
 		"psr-4": {
