@@ -166,7 +166,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
       }else{
           return [
             'code' => 500,
-            'errors' => Html::errorSummary($model, ['encode' => false]);
+            'errors' => Html::errorSummary($model, ['encode' => false])
           ];
       }
     }
@@ -176,7 +176,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
         $model = new <?= $modelClass ?>();
         
         if (Yii::$app->request->isAjax) {
-          this->ajaxSave();
+          $this->ajaxSave();
         }
         
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -193,7 +193,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
         $model = $this->findModel(<?= $actionParams ?>);
         
         if (Yii::$app->request->isAjax) {
-          this->ajaxSave();
+          $this->ajaxSave();
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
