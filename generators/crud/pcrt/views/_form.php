@@ -40,17 +40,17 @@ use yii\web\JsExpression;
           [
             // TODO : Setting the form property
             'layout' => 'horizontal',
-            'fieldConfig' => [
-                'id' => <?php echo "(isset(\$formname)) ? \$formname : '" . Inflector::camel2id(StringHelper::basename($generator->modelClass)) . "' . rand ()" ?>,
-                /*'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
+            'id' => <?php echo "(isset(\$formname)) ? \$formname : '" . Inflector::camel2id(StringHelper::basename($generator->modelClass)) . "' . rand ()" ?>,
+            /*'fieldConfig' => [
+                'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
                 'horizontalCssClasses' => [
                     'label' => 'col-sm-4',
                     'offset' => 'offset-sm-4',
                     'wrapper' => 'col-sm-8',
                     'error' => '',
                     'hint' => '',
-                ],*/
-            ],
+                ],
+            ],*/
           ]
     ); ?>
 
@@ -59,12 +59,12 @@ use yii\web\JsExpression;
         echo "    <?php " . $generator->generateActiveField($attribute) . " ?>\n\n";
     }
 } ?>
-    
+    <?php echo "<?php if( isset(\$hidebutton) === false ): ?>" ?>
     <div class="form-group">
         <?= "<a href=\"?r=$controllerName\" class='btn btn-secondary'><i class='fas fa-times'></i> Cancella</a>"; ?> <?= "\n" ?>
         <?= "<?= " ?>Html::submitButton('<i class="fas fa-plus"></i> Salva', ['class' => 'btn btn-success']) ?>
     </div>
-
+    <?php echo "<?php endif; ?>" ?>
     <?= "<?php " ?>ActiveForm::end(); ?>
 
 </div>

@@ -55,31 +55,31 @@ class Generator extends \yii\gii\generators\crud\Generator
     $controllerClass = StringHelper::basename($this->controllerClass);
     $controllerClass = lcfirst(str_replace("Controller","",$controllerClass));
     $ret = "";
-    
+
     if(!$isfilter){
-      $ret = "// Need to change the lookup text field to adjust with 
+      $ret = "// Need to change the lookup text field to adjust with
       // the correct column name
       \$value = [];
-      if(is_numeric(\$model->$column)){ 
+      if(is_numeric(\$model->$column)){
         \$query = (new \yii\db\Query())
           ->select(['id as id', 'description as text'])
           ->from('$fktable')
           ->where(['=', 'id', \$model->$column])->one();
-        \$value = [\$query['id'] => \$query['description']];
+        \$value = [\$query['id'] => \$query['text']];
       }\n";
-    }else{  
-      $ret = "// Need to change the lookup text field to adjust with 
+    }else{
+      $ret = "// Need to change the lookup text field to adjust with
       // the correct column name
       \$value = [];
       \$filter_$column = \$model->getFilter('$column',null);
-      if(is_numeric(\$filter_$column)){ 
+      if(is_numeric(\$filter_$column)){
         \$query = (new \yii\db\Query())
           ->select(['id as id', 'description as text'])
           ->from('$fktable')
           ->where(['=', 'id', \$filter_$column])->one();
-        \$value = [\$query['id'] => \$query['description']];
+        \$value = [\$query['id'] => \$query['text']];
       }\n";
-      
+
     }
 
     if(!$isfilter){

@@ -151,39 +151,24 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
 
     }
 
+
+
     public function actionIndex()
     {
         $searchModel = new <?= isset($searchModelAlias) ? $searchModelAlias : $searchModelClass ?>();
         return $this->render('index', ['searchModel' => $searchModel]);
     }
-    
-    public function ajaxSave(){
-      
-      $model = new <?= $modelClass ?>();
-      
-      if ($model->load(Yii::$app->request->post()) && $model->save()) {
-          Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-          return [
-            'code' => 200
-          ];
-      }else{
-          return [
-            'code' => 500,
-            'errors' => Html::errorSummary($model, ['encode' => false])
-          ];
-      }
-    }
 
     public function actionCreate()
     {
         $model = new <?= $modelClass ?>();
-        
-        if (Yii::$app->request->isAjax) {
-          $this->ajaxSave();
+
+        if (Yii::$app->request->isAjax && Yii::$app->request->isPost) {
+          $this->ajaxSave($model);
         }
-        
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+
+        if (Yii::$app->request->isPost) {
+          $this->Save($model);
         }
 
         return $this->render('create', [
@@ -194,13 +179,13 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     public function actionUpdate(<?= $actionParams ?>)
     {
         $model = $this->findModel(<?= $actionParams ?>);
-        
-        if (Yii::$app->request->isAjax) {
-          $this->ajaxSave();
+
+        if (Yii::$app->request->isAjax && Yii::$app->request->isPost) {
+          $this->ajaxSave($model);
         }
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+        if (Yii::$app->request->isPost) {
+          $this->Save($model);
         }
 
         return $this->render('update', [
@@ -213,6 +198,21 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
         $this->findModel(<?= $actionParams ?>)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionAjaxForm(<?= $actionParams ?>){
+      Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+      $model = "";
+      if(<?= $actionParams ?> !== null && <?= $actionParams ?> !== ""){
+        $model = $this->findModel(<?= $actionParams ?>);
+      }else{
+        $model = new <?= $modelClass ?>();
+      }
+      return $this->renderAjax('_form', [
+          'model' => $model,
+          'formname' => 'modal_<?= strtolower($modelClass) ?>',
+          'hidebutton' => true
+      ]);
     }
 
     protected function findModel(<?= $actionParams ?>)
@@ -233,5 +233,27 @@ if (count($pks) === 1) {
         }
 
         throw new NotFoundHttpException(<?= $generator->generateString('The requested page does not exist.') ?>);
+    }
+
+    protected function ajaxSave($model){
+      Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+      if ($model->load(Yii::$app->request->post()) && $model->save()) {
+          return [
+            'code' => 200
+          ];
+      }else{
+          return [
+            'code' => 500,
+            'errors' => Html::errorSummary($model, ['encode' => false])
+          ];
+      }
+    }
+
+    protected function Save($model){
+
+      if ($model->load(Yii::$app->request->post()) && $model->save()) {
+          return $this->redirect(['index']);
+      }
+
     }
 }
