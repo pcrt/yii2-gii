@@ -4,7 +4,7 @@
 	"description": "Alternative Gii generator for Yii2 framework",
 	"keywords": ["yii2", "theme", "helper", "assets", "gii"],
 	"license": "BSD-3-Clause",
-	"version": "0.9.0",
+	"version": "1.0.2",
 	"authors": [
 		{
 			"name": "Marco Petrini",
