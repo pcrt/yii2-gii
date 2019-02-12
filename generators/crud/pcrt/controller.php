@@ -40,6 +40,7 @@ use yii\data\ActiveDataProvider;
 use <?= ltrim($generator->baseControllerClass, '\\') ?>;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 <?php if (count($foreignKeys) !== 0) : ?>
 use pcrt\behavior\Lookable;
@@ -73,6 +74,16 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
                     'get-<?=lcfirst($key['fk_table'])?>' => ['POST'],
 <?php endforeach; ?>
 <?php endif; ?>
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['*'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];

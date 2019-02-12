@@ -75,7 +75,10 @@ class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $m
 
         // filtering conditions
 
-<?php foreach($fields as $key => $field): ?>
+<?php foreach($fields as $skey => $field): ?>
+
+<?php $key = str_replace("-","",$skey); ?>
+
 <?php if(($field['type']==="integer" && $field['fk'] === []) || $field['type']==="double" || $field['type']==="float"): ?>
         $<?= $key ?> = $this->getFilter('<?= $key ?>',null);
         if($<?= $key ?> !== "" && $<?= $key ?> !== null){
