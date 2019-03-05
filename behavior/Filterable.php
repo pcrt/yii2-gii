@@ -41,7 +41,7 @@ class Filterable extends Behavior
         $session = \Yii::$app->session;
         $session_array = iterator_to_array($session->getIterator());
         foreach ($session_array as $k => $s) {
-            if (strpos($key, $this->tablename) !== false) {
+            if (strpos($k, $this->tablename) !== false) {
                 $session->remove($key);
             }
         }
