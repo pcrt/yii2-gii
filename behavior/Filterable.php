@@ -42,7 +42,7 @@ class Filterable extends Behavior
         $session_array = iterator_to_array($session->getIterator());
         foreach ($session_array as $k => $s) {
             if (strpos($k, $this->tablename) !== false) {
-                $session->remove($key);
+                $session->remove($k);
             }
         }
     }
