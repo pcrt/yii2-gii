@@ -36,7 +36,7 @@ class Filterable extends Behavior
         return;
     }
     
-    public function clearAll()
+    public function clearAllFilters()
     {
         $session = \Yii::$app->session;
         $session_array = iterator_to_array($session->getIterator());

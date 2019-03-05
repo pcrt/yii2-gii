@@ -123,11 +123,11 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
 
 <?php endforeach; ?>
 
-    public function actionList($pageNumber=0,$pageSize=50){
+    public function actionList($pageNumber = 0 ,$pageSize = 50){
 <?php if ($generator->indexWidgetType === 'grid'): ?>
       \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 <?php endif; ?>
-      if($pageSize == ""){
+      if($pageSize == ''){
         $pageSize = 50;
       }
       $searchModel = new <?= isset($searchModelAlias) ? $searchModelAlias : $searchModelClass ?>();
