@@ -5,7 +5,6 @@
 
 use yii\helpers\StringHelper;
 
-
 /* @var $this yii\web\View */
 /* @var $generator yii\gii\generators\crud\Generator */
 
@@ -20,7 +19,6 @@ $searchAttributes = $generator->getSearchAttributes();
 $searchConditions = $generator->generateSearchConditions();
 $fields = $generator->getSearchField();
 
-
 echo "<?php\n";
 ?>
 
@@ -28,7 +26,7 @@ namespace <?= StringHelper::dirname(ltrim($generator->searchModelClass, '\\')) ?
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use <?= ltrim($generator->modelClass, '\\') . (isset($modelAlias) ? " as $modelAlias" : "") ?>;
+use <?= ltrim($generator->modelClass, '\\') . (isset($modelAlias) ? ' as $modelAlias' : '') ?>;
 
 /**
  * <?= $searchModelClass ?> represents the model behind the search form of `<?= $generator->modelClass ?>`.
@@ -74,35 +72,32 @@ class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $m
         ]);
 
         // filtering conditions
-
-<?php foreach($fields as $skey => $field): ?>
-
-<?php $key = str_replace("-","",$skey); ?>
-
-<?php if(($field['type']==="integer" && $field['fk'] === []) || $field['type']==="double" || $field['type']==="float"): ?>
+<?php foreach ($fields as $skey => $field): ?>
+    <?php $key = str_replace('-', '', $skey); ?>
+    <?php if (($field['type']==='integer' && $field['fk'] === []) || $field['type']==='double' || $field['type']==='float'): ?>
         $<?= $key ?> = $this->getFilter('<?= $key ?>',null);
         if($<?= $key ?> !== "" && $<?= $key ?> !== null){
           $query->andFilterWhere(['=', '<?= $key ?>', $<?= $key ?>]);
         }
-<?php endif; ?>
-<?php if($field['type']==="string" || $field['type']==="text"): ?>
+    <?php endif; ?>
+    <?php if ($field['type']==='string' || $field['type']==='text'): ?>
         $<?= $key ?> = $this->getFilter('<?= $key ?>',null);
         if($<?= $key ?> !== "" && $<?= $key ?> !== null){
           $query->andFilterWhere(['LIKE', '<?= $key ?>', $<?= $key ?>]);
         }
-<?php endif; ?>
-<?php if($field['type']==="date" || $field['type']==="datetime"): ?>
+    <?php endif; ?>
+    <?php if ($field['type']==='date' || $field['type']==='datetime'): ?>
         $<?= $key ?> = explode(" - ", $this->getFilter('<?= $key ?>',""));
         if(count($<?= $key ?>) === 2){
           $query->andFilterWhere(['BETWEEN', '<?= $key ?>', $<?= $key ?>[0], $<?= $key ?>[1]]);
         }
-<?php endif; ?>
-<?php if($field['type']==="integer" && $field['fk'] !== []): ?>
+    <?php endif; ?>
+    <?php if ($field['type']==='integer' && $field['fk'] !== []): ?>
         $<?= $key ?> = $this->getFilter('<?= $key ?>',null);
         if($<?= $key ?> !== "" && $<?= $key ?> !== null){
           $query->andFilterWhere(['IN', '<?= $key ?>', $<?= $key ?>]);
         }
-<?php endif; ?>
+    <?php endif; ?>
 <?php endforeach; ?>
         return $dataProvider;
     }

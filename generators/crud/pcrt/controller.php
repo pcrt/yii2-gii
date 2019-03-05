@@ -6,7 +6,6 @@
 use yii\db\ActiveRecordInterface;
 use yii\helpers\StringHelper;
 
-
 /* @var $this yii\web\View */
 /* @var $generator yii\gii\generators\crud\Generator */
 
@@ -33,7 +32,7 @@ namespace <?= StringHelper::dirname(ltrim($generator->controllerClass, '\\')) ?>
 use Yii;
 use <?= ltrim($generator->modelClass, '\\') ?>;
 <?php if (!empty($generator->searchModelClass)): ?>
-use <?= ltrim($generator->searchModelClass, '\\') . (isset($searchModelAlias) ? " as $searchModelAlias" : "") ?>;
+use <?= ltrim($generator->searchModelClass, '\\') . (isset($searchModelAlias) ? " as $searchModelAlias" : '') ?>;
 <?php else: ?>
 use yii\data\ActiveDataProvider;
 <?php endif; ?>
@@ -42,7 +41,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
-<?php if (count($foreignKeys) !== 0) : ?>
+<?php if (count($foreignKeys) !== 0): ?>
 use pcrt\behavior\Lookable;
 <?php endif; ?>
 /**
@@ -56,7 +55,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     public function behaviors()
     {
         return [
-<?php if(count($foreignKeys) !== 0) : ?>
+<?php if (count($foreignKeys) !== 0): ?>
             [
               'class' => Lookable::className(),
             ],
@@ -69,10 +68,10 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
 <?php if (!empty($generator->searchModelClass)): ?>
                     'set-filter' => ['POST'],
 <?php endif; ?>
-<?php if(count($foreignKeys) !== 0) : ?>
-<?php foreach($foreignKeys as $key): ?>
+<?php if (count($foreignKeys) !== 0): ?>
+    <?php foreach ($foreignKeys as $key): ?>
                     'get-<?=lcfirst($key['fk_table'])?>' => ['POST'],
-<?php endforeach; ?>
+    <?php endforeach; ?>
 <?php endif; ?>
                 ],
             ],
@@ -94,15 +93,15 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
         $post = $request->post();
         $model = new \<?= ltrim($generator->modelClass, '\\') ?>();
         foreach($post as $key => $val){
-          if(strpos($key, "filter__") !== false){
-            $name = str_replace("filter__","",$key);
+          if(strpos($key, 'filter__') !== false){
+            $name = str_replace('filter__',"",$key);
             $model->setFilter($name,$val);
           }
         }
         return;
     }
 <?php endif; ?>
-<?php foreach($foreignKeys as $key): ?>
+<?php foreach ($foreignKeys as $key): ?>
     public function actionGet<?=ucfirst($key['fk_table'])?>()
     {
 
@@ -125,7 +124,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
 <?php endforeach; ?>
 
     public function actionList($pageNumber=0,$pageSize=50){
-<?php if($generator->indexWidgetType === 'grid'): ?>
+<?php if ($generator->indexWidgetType === 'grid'): ?>
       \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 <?php endif; ?>
       if($pageSize == ""){
@@ -143,7 +142,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
           'searchModel' => $searchModel,
           'dataProvider' => $dataProvider,
       ]);
-<?php if($generator->indexWidgetType === 'grid'): ?>
+<?php if ($generator->indexWidgetType === 'grid'): ?>
       return ['html'=>$data,'total'=>$result];
 <?php else: ?>
       return $data;

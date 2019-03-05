@@ -3,10 +3,10 @@ use yii\web\JsExpression;
 use yii\helpers\Inflector;
 use yii\helpers\StringHelper;
 
-$formid = 'modal_'.Inflector::camel2id(StringHelper::basename($generator->modelClass));
-$modaliderror = $formid."_error";
+$formid = 'modal_' . Inflector::camel2id(StringHelper::basename($generator->modelClass));
+$modaliderror = $formid . '_error';
 $controllerClass = StringHelper::basename($generator->controllerClass);
-$controllerName = lcfirst(str_replace("Controller","",$controllerClass));
+$controllerName = lcfirst(str_replace('Controller', '', $controllerClass));
 
 echo "<?php\n";
 ?>
@@ -27,7 +27,8 @@ $this->registerCssFile('https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.
 
 <?php
 
-$script = new JsExpression("
+$script = new JsExpression(
+    "
 
     function showModal(id){
       if(id == undefined){
@@ -81,9 +82,9 @@ $script = new JsExpression("
     }"
 );
 
-echo "<script type=\"text/javascript\">";
+echo '<script type="text/javascript">';
 echo $script;
-echo "</script>";
+echo '</script>';
 
 ?>
 

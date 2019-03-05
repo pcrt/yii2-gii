@@ -8,29 +8,42 @@ use yii\web\Session;
 
 class Filterable extends Behavior
 {
-    public $tablename = "";
+    public $tablename = '';
 
-    public function getFilter($name = false) { //senza nome restituisco tutti i filtri
+    public function getFilter($name = false)
+    {
         $tablename = $this->tablename;
         $session = Yii::$app->session;
         // Verifico che il parametro name non sia nullo
-        if ($name !== false){
-          return $session->get($tablename.".".$name, null);
+        if ($name !== false) {
+            return $session->get($tablename . '.' . $name, null);
         // Se name non è impostato restituisco tutta l'array dei filtri
-        }elseif($name !== false){
-          $_session = [];
-          foreach ($session as $name => $value){
-            $_session[$name] = $value;
-          }
-          return $_session;
+        } elseif ($name !== false) {
+            $_session = [];
+            foreach ($session as $name => $value) {
+                $_session[$name] = $value;
+            }
+            return $_session;
         }
         return;
     }
 
-    public function setFilter($name, $value) {
+    public function setFilter($name, $value)
+    {
         $tablename = $this->tablename;
         $session = Yii::$app->session;
-        $session->set($tablename.".".$name, $value); 
+        $session->set($tablename . '.' . $name, $value);
         return;
+    }
+    
+    public function clearAll()
+    {
+        $session = \Yii::$app->session;
+        $session_array = iterator_to_array($session->getIterator());
+        foreach ($session_array as $k => $s) {
+            if (strpos($key, $this->tablename) !== false) {
+                $session->remove($key);
+            }
+        }
     }
 }

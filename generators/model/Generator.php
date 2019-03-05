@@ -5,6 +5,7 @@
  * @license http://www.yiiframework.com/license/
  */
 namespace pcrt\generators\model;
+
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\db\ActiveQuery;
@@ -15,6 +16,7 @@ use yii\db\TableSchema;
 use yii\gii\CodeFile;
 use yii\helpers\Inflector;
 use yii\base\NotSupportedException;
+
 /**
  * This generator will generate one or multiple ActiveRecord classes for the specified database table.
  *
@@ -34,5 +36,4 @@ class Generator extends \yii\gii\generators\model\Generator
     {
         return 'This generator generates an ActiveRecord class for the specified database table with PCRT customization.';
     }
-
 }

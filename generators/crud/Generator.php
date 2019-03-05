@@ -7,6 +7,7 @@
  */
 
 namespace pcrt\generators\crud;
+
 use Yii;
 use yii\db\ActiveRecord;
 use yii\db\BaseActiveRecord;
@@ -28,36 +29,36 @@ use yii\helpers\StringHelper;
 
 class Generator extends \yii\gii\generators\crud\Generator
 {
-  public function getName()
-  {
-      return 'PCRT CRUD Generator';
-  }
-  /**
-   * {@inheritdoc}
-   */
-  public function getDescription()
-  {
-      return 'This generator generates an ActiveRecord class for the specified database table with PCRT customization.';
-  }
+    public function getName()
+    {
+        return 'PCRT CRUD Generator';
+    }
+    /**
+     * {@inheritdoc}
+     */
+    public function getDescription()
+    {
+        return 'This generator generates an ActiveRecord class for the specified database table with PCRT customization.';
+    }
 
 
-  /**
-  * Generate code for Select2 field using pcrt/yii2-select2
-  * @param string $table The name of origin Table
-  * @param string $column The name of origin Column
-  * @param string $fktable The name of lookup Table
-  * @param boolean $isfilter True if the field is user as filter
-  * @return string
-  */
-  private function generateSelect2ActiveField($table, $column, $fktable, $isfilter)
-  {
-    // TODO: Need Improve for CamelCase ControllerClass
-    $controllerClass = StringHelper::basename($this->controllerClass);
-    $controllerClass = lcfirst(str_replace("Controller","",$controllerClass));
-    $ret = "";
+    /**
+    * Generate code for Select2 field using pcrt/yii2-select2
+    * @param string $table The name of origin Table
+    * @param string $column The name of origin Column
+    * @param string $fktable The name of lookup Table
+    * @param boolean $isfilter True if the field is user as filter
+    * @return string
+    */
+    private function generateSelect2ActiveField($table, $column, $fktable, $isfilter)
+    {
+        // TODO: Need Improve for CamelCase ControllerClass
+        $controllerClass = StringHelper::basename($this->controllerClass);
+        $controllerClass = lcfirst(str_replace('Controller', '', $controllerClass));
+        $ret = '';
 
-    if(!$isfilter){
-      $ret = "// Need to change the lookup text field to adjust with
+        if (!$isfilter) {
+            $ret = "// Need to change the lookup text field to adjust with
       // the correct column name
       \$value = [];
       if(is_numeric(\$model->$column)){
@@ -67,8 +68,8 @@ class Generator extends \yii\gii\generators\crud\Generator
           ->where(['=', 'id', \$model->$column])->one();
         \$value = [\$query['id'] => \$query['text']];
       }\n";
-    }else{
-      $ret = "// Need to change the lookup text field to adjust with
+        } else {
+            $ret = "// Need to change the lookup text field to adjust with
       // the correct column name
       \$value = [];
       \$filter_$column = \$model->getFilter('$column',null);
@@ -79,11 +80,10 @@ class Generator extends \yii\gii\generators\crud\Generator
           ->where(['=', 'id', \$filter_$column])->one();
         \$value = [\$query['id'] => \$query['text']];
       }\n";
+        }
 
-    }
-
-    if(!$isfilter){
-      $ret .= "echo \$form->field(\$model, '$column')->widget(
+        if (!$isfilter) {
+            $ret .= "echo \$form->field(\$model, '$column')->widget(
           Select2::class,
           [
               'items' => \$value,
@@ -105,8 +105,8 @@ class Generator extends \yii\gii\generators\crud\Generator
               ]
           ]
       );";
-    }else{
-      $ret .="echo \$form->field(\$model, '$column')->widget(
+        } else {
+            $ret .="echo \$form->field(\$model, '$column')->widget(
           Select2::class,
           [
               'items' => \$value,
@@ -129,25 +129,25 @@ class Generator extends \yii\gii\generators\crud\Generator
               ]
           ]
       );";
+        }
+        return $ret;
     }
-    return $ret;
-  }
 
 
-  /**
-  * Generate code for DaterangePicker field using pcrt/yii2-datepicker
-  * @param string $table The name of origin Table
-  * @param string $column The name of origin Column
-  * @param string $type Not used
-  * @param boolean $isfilter True if the field is user as filter
-  * @return string
-  * TODO: Move locale to template for code optimization
-  * TODO: I18n Support
-  */
-  private function generateDatePickerActiveField($table, $column, $type, $isfilter)
-  {
-    if(!$isfilter){
-      return "\$form->field(\$model, '$column')->widget(
+    /**
+    * Generate code for DaterangePicker field using pcrt/yii2-datepicker
+    * @param string $table The name of origin Table
+    * @param string $column The name of origin Column
+    * @param string $type Not used
+    * @param boolean $isfilter True if the field is user as filter
+    * @return string
+    * TODO: Move locale to template for code optimization
+    * TODO: I18n Support
+    */
+    private function generateDatePickerActiveField($table, $column, $type, $isfilter)
+    {
+        if (!$isfilter) {
+            return "\$form->field(\$model, '$column')->widget(
           Datepicker::class,
           [
               'clientOptions' => [
@@ -158,8 +158,8 @@ class Generator extends \yii\gii\generators\crud\Generator
               ]
           ]
       );";
-    }else{
-      return "\$form->field(\$model, '$column')->widget(
+        } else {
+            return "\$form->field(\$model, '$column')->widget(
           Datepicker::class,
           [
               'options' =>['name' => 'filter__$column'],
@@ -172,12 +172,12 @@ class Generator extends \yii\gii\generators\crud\Generator
               ]
           ]
       );";
+        }
     }
-  }
 
-  private function generateTimePickerActiveField($table, $column, $type)
-  {
-      return "\$form->field(\$model, '$column')->widget(
+    private function generateTimePickerActiveField($table, $column, $type)
+    {
+        return "\$form->field(\$model, '$column')->widget(
           Datepicker::class,
           [
               'clientOptions' => [
@@ -190,137 +190,137 @@ class Generator extends \yii\gii\generators\crud\Generator
               ]
           ]
       );";
-  }
-
-  /**
-  * Function to get FK array
-  * @return array
-  * TODO: Need Improve for multicolumn FK ???
-  */
-  public function getForeignKeys(){
-    $FK = [];
-    $tableSchema = $this->getTableSchema();
-    if ($tableSchema !== false) {
-      $fk = $tableSchema->foreignKeys;
-      foreach($fk as $f){
-        $fk = [];
-        $fk['table'] = $tableSchema->name;
-        foreach ($f as $key => $val) {
-          if($key === 0){
-            $fk['fk_table'] = $val;
-          }else{
-            $fk['fk_field'] = $val;
-            $fk['field'] = $key;
-          }
-        }
-        $FK[] = $fk;
-      }
     }
-    return $FK;
-  }
 
-  /**
-  * Function to get serch field array
-  * @return array
-  * TODO: Is used, Is needed ???
-  */
-  public function getSearchField(){
-    $search=[];
-    $tableSchema = $this->getTableSchema();
-    if ($tableSchema !== false){
-
-      $columns = $tableSchema->columns;
-      $fkey = $this->getForeignKeys();
-
-      // TODO: Need Improvment for Many to Many Relation
-      // Traverse every column and setting Type and FK
-      foreach($columns as $c){
-        $search[$c->name]['type']=$c->type;
-        // If Type is Integer find for possible FK
-        if($c->type === "integer"){
-          // Setting default FK to empty array
-          $search[$c->name]['fk'] = [];
-          foreach($fkey as $f){
-            if($f['field'] === $c->name){
-              // If match setting FK value
-              $search[$c->name]['fk'] = $f;
+    /**
+    * Function to get FK array
+    * @return array
+    * TODO: Need Improve for multicolumn FK ???
+    */
+    public function getForeignKeys()
+    {
+        $FK = [];
+        $tableSchema = $this->getTableSchema();
+        if ($tableSchema !== false) {
+            $fk = $tableSchema->foreignKeys;
+            foreach ($fk as $f) {
+                $fk = [];
+                $fk['table'] = $tableSchema->name;
+                foreach ($f as $key => $val) {
+                    if ($key === 0) {
+                        $fk['fk_table'] = $val;
+                    } else {
+                        $fk['fk_field'] = $val;
+                        $fk['field'] = $key;
+                    }
+                }
+                $FK[] = $fk;
             }
-          }
         }
-      }
+        return $FK;
     }
-    return $search;
-  }
 
-  /**
-   * @inheritdoc
-   */
-  public function generateActiveField($attribute)
-  {
-      $tableSchema = $this->getTableSchema();
+    /**
+    * Function to get serch field array
+    * @return array
+    * TODO: Is used, Is needed ???
+    */
+    public function getSearchField()
+    {
+        $search=[];
+        $tableSchema = $this->getTableSchema();
+        if ($tableSchema !== false) {
+            $columns = $tableSchema->columns;
+            $fkey = $this->getForeignKeys();
 
-      if ($tableSchema === false || !isset($tableSchema->columns[$attribute])) {
-          if (preg_match('/^(password|pass|passwd|passcode)$/i', $attribute)) {
-              return "\$form->field(\$model, '$attribute')->passwordInput()";
-          }
-          return " echo " . "\$form->field(\$model, '$attribute')";
-      }
-
-      $column = $tableSchema->columns[$attribute];
-      $fk = $this->getForeignKeys();
-
-      foreach($fk as $f){
-        if($f['field']==$column->name){
-          return $this->generateSelect2ActiveField($tableSchema,$column->name,$f['fk_table'],false);
+            // TODO: Need Improvment for Many to Many Relation
+            // Traverse every column and setting Type and FK
+            foreach ($columns as $c) {
+                $search[$c->name]['type']=$c->type;
+                // If Type is Integer find for possible FK
+                if ($c->type === 'integer') {
+                    // Setting default FK to empty array
+                    $search[$c->name]['fk'] = [];
+                    foreach ($fkey as $f) {
+                        if ($f['field'] === $c->name) {
+                            // If match setting FK value
+                            $search[$c->name]['fk'] = $f;
+                        }
+                    }
+                }
+            }
         }
-      }
+        return $search;
+    }
 
-      if ($column->type === 'date' || $column->type === 'datetime') {
-          return " echo " . $this->generateDatePickerActiveField($tableSchema,$column->name,'date',false);
-      }
+    /**
+     * @inheritdoc
+     */
+    public function generateActiveField($attribute)
+    {
+        $tableSchema = $this->getTableSchema();
 
-      if ($column->type === 'time' ) {
-          return " echo " . $this->generateTimePickerActiveField($tableSchema,$column->name,'date');
-      }
-
-      return " echo " . parent::generateActiveField($attribute);
-  }
-
-  /**
-   * @inheritdoc
-   */
-  public function generateActiveSearchField($attribute)
-  {
-      $tableSchema = $this->getTableSchema();
-
-      if ($tableSchema === false) {
-          //return "Html::textInput('filter__$attribute', '', ['class' => 'form-control']);";
-          return " echo \$form->field(\$model, '$attribute')->textInput(['name' => 'filter__$attribute', 'class' => 'form-control' ])";
-      }
-
-      $column = $tableSchema->columns[$attribute];
-
-      $fk = $this->getForeignKeys();
-      foreach($fk as $f){
-        if($f['field']==$column->name){
-          return $this->generateSelect2ActiveField($tableSchema,$column->name,$f['fk_table'],true);
+        if ($tableSchema === false || !isset($tableSchema->columns[$attribute])) {
+            if (preg_match('/^(password|pass|passwd|passcode)$/i', $attribute)) {
+                return "\$form->field(\$model, '$attribute')->passwordInput()";
+            }
+            return ' echo ' . '$form->field($model, \'$attribute\')';
         }
-      }
 
-      if ($column->phpType === 'boolean') {
-          return " echo " . "Html::checkbox('filter__$attribute', false, ['class' => 'form-control']);";
-      }
+        $column = $tableSchema->columns[$attribute];
+        $fk = $this->getForeignKeys();
 
-      if ($column->type === 'date' || $column->type === 'datetime') {
-          return " echo " . $this->generateDatePickerActiveField($tableSchema,$column->name,'date',true);
-      }
+        foreach ($fk as $f) {
+            if ($f['field']==$column->name) {
+                return $this->generateSelect2ActiveField($tableSchema, $column->name, $f['fk_table'], false);
+            }
+        }
 
-      if ($column->type === 'time' ) {
-          return " echo " . $this->generateTimePickerActiveField($tableSchema,$column->name,'date');
-      }
+        if ($column->type === 'date' || $column->type === 'datetime') {
+            return ' echo ' . $this->generateDatePickerActiveField($tableSchema, $column->name, 'date', false);
+        }
 
-      //return "Html::textInput('filter__$attribute', '', ['class' => 'form-control']);";
-      return " echo \$form->field(\$model, '$attribute')->textInput(['name' => 'filter__$attribute', 'class' => 'form-control' ])";
-  }
+        if ($column->type === 'time') {
+            return ' echo ' . $this->generateTimePickerActiveField($tableSchema, $column->name, 'date');
+        }
 
+        return ' echo ' . parent::generateActiveField($attribute);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function generateActiveSearchField($attribute)
+    {
+        $tableSchema = $this->getTableSchema();
+
+        if ($tableSchema === false) {
+            //return "Html::textInput('filter__$attribute', '', ['class' => 'form-control']);";
+            return " echo \$form->field(\$model, '$attribute')->textInput(['name' => 'filter__$attribute', 'class' => 'form-control' ])";
+        }
+
+        $column = $tableSchema->columns[$attribute];
+
+        $fk = $this->getForeignKeys();
+        foreach ($fk as $f) {
+            if ($f['field']==$column->name) {
+                return $this->generateSelect2ActiveField($tableSchema, $column->name, $f['fk_table'], true);
+            }
+        }
+
+        if ($column->phpType === 'boolean') {
+            return ' echo ' . "Html::checkbox('filter__$attribute', false, ['class' => 'form-control']);";
+        }
+
+        if ($column->type === 'date' || $column->type === 'datetime') {
+            return ' echo ' . $this->generateDatePickerActiveField($tableSchema, $column->name, 'date', true);
+        }
+
+        if ($column->type === 'time') {
+            return ' echo ' . $this->generateTimePickerActiveField($tableSchema, $column->name, 'date');
+        }
+
+        //return "Html::textInput('filter__$attribute', '', ['class' => 'form-control']);";
+        return " echo \$form->field(\$model, '$attribute')->textInput(['name' => 'filter__$attribute', 'class' => 'form-control' ])";
+    }
 }
