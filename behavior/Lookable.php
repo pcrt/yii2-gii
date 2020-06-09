@@ -8,7 +8,7 @@ use yii\base\Behavior;
 // Add method to extract key,description array valid to Select2 dropdown .
 class Lookable extends Behavior
 {
-    public function getTableList($query, $limit)
+    public function getTableList($query, $limit, $page)
     {
         $count = $query->count();
         if ($count > (($page+1) * $limit)) {
