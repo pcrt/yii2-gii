@@ -11,8 +11,8 @@ class Lookable extends Behavior
     public function getTableList($query, $limit)
     {
         $count = $query->count();
-        if ($query->count() > $limit) {
-            $result = $query->all();
+        if ($count > (($page+1) * $limit)) {
+            $result = $query->offset($page * $limit)->limit($limit)->all();
             \Yii::trace($result);
             return [
               'results' => $result,
@@ -21,7 +21,7 @@ class Lookable extends Behavior
               ]
             ];
         } else {
-            $result = $query->all();
+            $result = $query->offset($page * $limit)->all();
             \Yii::trace($result);
             return [
               'results' => $result
